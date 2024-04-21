@@ -20,12 +20,13 @@ void main() {
       });
       apiService = ApiService(client: mockClient);
 
+      const countryCode = 'EE';
       const personalCode = '50307172740';
       const loanAmount = 10000;
       const loanPeriod = 12;
 
       final result = await apiService.requestLoanDecision(
-          personalCode, loanAmount, loanPeriod);
+          countryCode, personalCode, loanAmount, loanPeriod);
 
       expect(result, isA<Map<String, String>>());
       expect(result['loanAmount'], '10000');
@@ -45,12 +46,13 @@ void main() {
 
       apiService = ApiService(client: mockClient);
 
+      const countryCode = 'EE';
       const personalCode = '50307172740';
       const loanAmount = 50000;
       const loanPeriod = 24;
 
       final result = await apiService.requestLoanDecision(
-          personalCode, loanAmount, loanPeriod);
+          countryCode, personalCode, loanAmount, loanPeriod);
 
       expect(result, isA<Map<String, String>>());
       expect(result['loanAmount'], '0');

@@ -5,7 +5,9 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:inbank_frontend/fonts.dart';
+import 'package:inbank_frontend/widgets/country_dropdown_field.dart';
 import 'package:inbank_frontend/widgets/national_id_field.dart';
+
 
 import '../api_service.dart';
 import '../colors.dart';
@@ -22,6 +24,7 @@ class _LoanFormState extends State<LoanForm> {
   final _formKey = GlobalKey<FormState>();
   final _apiService = ApiService();
   String _nationalId = '';
+  String _countryCode = '';
   int _loanAmount = 2500;
   int _loanPeriod = 36;
   int _loanAmountResult = 0;
@@ -33,7 +36,7 @@ class _LoanFormState extends State<LoanForm> {
   void _submitForm() async {
     if (_formKey.currentState!.validate()) {
       final result = await _apiService.requestLoanDecision(
-          _nationalId, _loanAmount, _loanPeriod);
+         _countryCode, _nationalId, _loanAmount, _loanPeriod);
       setState(() {
         int tempAmount = int.parse(result['loanAmount'].toString());
         int tempPeriod = int.parse(result['loanPeriod'].toString());
@@ -76,11 +79,17 @@ class _LoanFormState extends State<LoanForm> {
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          CountryDropdownFormField(
+                            onChanged: (value) {
+                              setState(() {
+                                _countryCode = value ?? '';
+                              });
+                            },
+                          ),
                           NationalIdTextFormField(
                             onChanged: (value) {
                               setState(() {
                                 _nationalId = value ?? '';
-                                _submitForm();
                               });
                             },
                           ),
@@ -88,7 +97,7 @@ class _LoanFormState extends State<LoanForm> {
                       );
                     },
                   ),
-                  const SizedBox(height: 60.0),
+                  const SizedBox(height: 15.0),
                   Text('Loan Amount: $_loanAmount €'),
                   const SizedBox(height: 8),
                   Slider.adaptive(
@@ -101,13 +110,12 @@ class _LoanFormState extends State<LoanForm> {
                     onChanged: (double newValue) {
                       setState(() {
                         _loanAmount = ((newValue.floor() / 100).round() * 100);
-                        _submitForm();
                       });
                     },
                   ),
                   const SizedBox(height: 4),
-                  Row(
-                    children: const [
+                  const Row(
+                    children: [
                       Expanded(
                         child: Padding(
                           padding: EdgeInsets.only(left: 12),
@@ -127,7 +135,7 @@ class _LoanFormState extends State<LoanForm> {
                       )
                     ],
                   ),
-                  const SizedBox(height: 24.0),
+                  const SizedBox(height: 15.0),
                   Text('Loan Period: $_loanPeriod months'),
                   const SizedBox(height: 8),
                   Slider.adaptive(
@@ -140,7 +148,6 @@ class _LoanFormState extends State<LoanForm> {
                     onChanged: (double newValue) {
                       setState(() {
                         _loanPeriod = ((newValue.floor() / 6).round() * 6);
-                        _submitForm();
                       });
                     },
                   ),
@@ -152,7 +159,7 @@ class _LoanFormState extends State<LoanForm> {
                           padding: EdgeInsets.only(left: 12),
                           child: Align(
                               alignment: Alignment.centerLeft,
-                              child: Text('6 months')),
+                              child: Text('12 months')),
                         ),
                       ),
                       Expanded(
@@ -166,7 +173,22 @@ class _LoanFormState extends State<LoanForm> {
                       )
                     ],
                   ),
-                  const SizedBox(height: 24.0),
+                  const SizedBox(height: 15.0),
+                  ElevatedButton(
+                    onPressed: _submitForm, // Label for the button
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: AppColors.textColor, // Text color
+                      backgroundColor: AppColors.secondaryColor, // Button background color
+                      elevation: 2, // Shadow elevation
+                      textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold), // Text style
+                      padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 15.0), // Padding inside the button
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0), // Rounded corners shape
+                      ),
+                    ), // Call the submitForm function when button is pressed
+                    child: const Text('Submit'),
+                  ),
+                  const SizedBox(height: 15.0),
                 ],
               ),
             ),

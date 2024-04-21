@@ -48,3 +48,8 @@ and loan period based on the form inputs.
 The ApiService component provides methods for making API calls to the backend API.
 It sends loan application information to the backend API and receives a response
 with the approved loan amount and loan period.
+
+### Age validation test DATA:
+Underage: 62404213782
+Over aged: 32001019744
+Loan period > lifetime: 34605216077 
