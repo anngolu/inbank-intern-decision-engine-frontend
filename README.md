@@ -49,7 +49,15 @@ The ApiService component provides methods for making API calls to the backend AP
 It sends loan application information to the backend API and receives a response
 with the approved loan amount and loan period.
 
-### Age validation test DATA:
-Underage: 62404213782
-Over aged: 32001019744
-Loan period > lifetime: 34605216077 
+### Test data
+
+#### Age validation
+- Underage: 62404213782
+- Over aged: 32001019744
+- Loan period > lifetime: 34605216077 
+
+#### Loan restriction validation
+- Debtor: 37605030299
+- Segment 1: 50307172740
+- Segment 2: 38411266610
+- Segment 3: 35006069515
